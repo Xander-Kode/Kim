@@ -299,9 +299,9 @@
         "video_item_3LTC3Q": {
           "type": "video_item",
           "settings": {
-            "video_url": "https://www.youtube.com/watch?v=PSBpgood_yQ&list=RDPSBpgood_yQ&start_radio=1",
-            "title": "kims title",
-            "description": "xcxcxzcxzcxcxzc",
+            "video_url": "https://www.youtube.com/watch?v=gIlVOXbglWM&list=RDPSBpgood_yQ&index=2",
+            "title": "kims",
+            "description": "something worth dying for",
             "link": "",
             "loop": false
           }
@@ -309,6 +309,7 @@
         "video_item_EwanfC": {
           "type": "video_item",
           "settings": {
+            "video_url": "",
             "title": "Project title",
             "description": "A short description of this project.",
             "link": "",
@@ -318,6 +319,7 @@
         "video_item_gTNwKa": {
           "type": "video_item",
           "settings": {
+            "video_url": "",
             "title": "Project title",
             "description": "A short description of this project.",
             "link": "",
@@ -327,6 +329,7 @@
         "video_item_kpT8tR": {
           "type": "video_item",
           "settings": {
+            "video_url": "",
             "title": "Project title",
             "description": "A short description of this project.",
             "link": "",
