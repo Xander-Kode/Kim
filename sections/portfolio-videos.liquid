@@ -1,3 +1,10 @@
+{%- style -%}
+  {%- for block in section.blocks -%}
+    {{ block.settings.title_font | font_face }}
+    {{ block.settings.subtitle_font | font_face }}
+  {%- endfor -%}
+{%- endstyle -%}
+
 <section
   class="portfolio-videos"
   id="portfolio-videos-{{ section.id }}"
@@ -15,12 +22,8 @@
 
   <div class="portfolio-videos__grid">
     {%- for block in section.blocks -%}
-      {%- style -%}
-        {{ block.settings.title_font | font_face }}
-        {{ block.settings.subtitle_font | font_face }}
-      {%- endstyle -%}
       <article
-        class="portfolio-videos__item"
+        class="portfolio-videos__item portfolio-videos__item--{{ forloop.index }}"
         {{ block.shopify_attributes }}
         style="
           --pv-title-family: {{ block.settings.title_font.family }}, {{ block.settings.title_font.fallback_families }};
@@ -179,20 +182,20 @@
   gap: 20px;
 }
 
-.portfolio-videos__item:nth-child(1) { grid-column: 1 / 5; }
-.portfolio-videos__item:nth-child(2) { grid-column: 5 / 8; }
-.portfolio-videos__item:nth-child(3) { grid-column: 1 / 4; }
-.portfolio-videos__item:nth-child(4) { grid-column: 4 / 8; }
+.portfolio-videos__item--1 { grid-column: 1 / 5; }
+.portfolio-videos__item--2 { grid-column: 5 / 8; }
+.portfolio-videos__item--3 { grid-column: 1 / 4; }
+.portfolio-videos__item--4 { grid-column: 4 / 8; }
 
 @media (max-width: 767px) {
   .portfolio-videos__grid {
     grid-template-columns: 1fr;
     gap: 14px;
   }
-  .portfolio-videos__item:nth-child(1),
-  .portfolio-videos__item:nth-child(2),
-  .portfolio-videos__item:nth-child(3),
-  .portfolio-videos__item:nth-child(4) {
+  .portfolio-videos__item--1,
+  .portfolio-videos__item--2,
+  .portfolio-videos__item--3,
+  .portfolio-videos__item--4 {
     grid-column: span 1;
   }
 }
@@ -207,7 +210,7 @@
 }
 
 .portfolio-videos__item:hover {
-  transform: translateY(-5px);
+  transform: translateY(-4px);
   box-shadow: 0 16px 40px rgba(0,0,0,0.13);
 }
 
@@ -217,13 +220,13 @@
   background: #111;
 }
 
-.portfolio-videos__item:nth-child(1) .portfolio-videos__media,
-.portfolio-videos__item:nth-child(4) .portfolio-videos__media {
+.portfolio-videos__item--1 .portfolio-videos__media,
+.portfolio-videos__item--4 .portfolio-videos__media {
   aspect-ratio: 16 / 9;
 }
 
-.portfolio-videos__item:nth-child(2) .portfolio-videos__media,
-.portfolio-videos__item:nth-child(3) .portfolio-videos__media {
+.portfolio-videos__item--2 .portfolio-videos__media,
+.portfolio-videos__item--3 .portfolio-videos__media {
   aspect-ratio: 4 / 3;
 }
 
@@ -689,7 +692,7 @@
       "id": "subheading",
       "label": "Subheading",
       "default": "A selection of recent projects"
-    },
+    }
   ],
   "blocks": [
     {

@@ -17,11 +17,6 @@
           "settings": {
             "video_url": "https://www.youtube.com/watch?v=gIlVOXbglWM&list=RDPSBpgood_yQ&index=2",
             "title": "kims",
-            "title_font": "inter_n4",
-            "title_size": "1.375rem",
-            "subtitle": "hello this is sub proj",
-            "subtitle_font": "inter_n4",
-            "subtitle_size": "0.9375rem",
             "description": "something worth dying for",
             "link": "",
             "loop": false
@@ -31,12 +26,7 @@
           "type": "video_item",
           "settings": {
             "video_url": "",
-            "title": "fjgfgjhlgjkh;f",
-            "title_font": "bagel_fat_one_n4",
-            "title_size": "0.9375rem",
-            "subtitle": "hello this is sub proj",
-            "subtitle_font": "inter_n4",
-            "subtitle_size": "0.9375rem",
+            "title": "Project title",
             "description": "A short description of this project.",
             "link": "",
             "loop": false
@@ -47,11 +37,6 @@
           "settings": {
             "video_url": "",
             "title": "Project title",
-            "title_font": "inter_n4",
-            "title_size": "1.375rem",
-            "subtitle": "hello this is sub proj",
-            "subtitle_font": "inter_n4",
-            "subtitle_size": "0.9375rem",
             "description": "A short description of this project.",
             "link": "",
             "loop": false
@@ -62,11 +47,6 @@
           "settings": {
             "video_url": "https://www.youtube.com/watch?v=JfTYIR5n-fQ&list=RDJfTYIR5n-fQ&start_radio=1",
             "title": "xcxcxcxc",
-            "title_font": "inter_n4",
-            "title_size": "1.375rem",
-            "subtitle": "hello this is sub proj",
-            "subtitle_font": "inter_n4",
-            "subtitle_size": "0.9375rem",
             "description": "A short dexcxzbfdgdfgfdscription of this project.",
             "link": "",
             "loop": false
