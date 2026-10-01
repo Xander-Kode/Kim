@@ -1,7 +1,7 @@
 <section
-  class="solo-video"
+  class="solo-video solo-video--{{ section.settings.color_scheme }}{% if section.settings.full_width %} solo-video--full-width{% endif %}"
   id="solo-video-{{ section.id }}"
-  style="--sv-max-width: {{ section.settings.max_width }}px; --sv-padding: {{ section.settings.section_padding }}px;"
+  style="--sv-max-width: {% if section.settings.full_width %}100%{% else %}{{ section.settings.max_width }}px{% endif %}; --sv-padding: {{ section.settings.section_padding }}px;"
 >
   {%- if section.settings.heading != blank or section.settings.subheading != blank -%}
     <div class="solo-video__header">
@@ -105,7 +105,17 @@
 
 {% stylesheet %}
 .solo-video {
-  padding: var(--sv-padding, 60px) 20px;
+  padding: var(--sv-padding, 64px) 20px;
+}
+
+.solo-video--light {
+  background: #ffffff;
+  color: #111111;
+}
+
+.solo-video--dark {
+  background: #0f0f0f;
+  color: #f5f5f5;
 }
 
 .solo-video__header {
@@ -135,6 +145,15 @@
   border-radius: 14px;
   overflow: hidden;
   background: #111;
+}
+
+.solo-video--full-width .solo-video__wrap {
+  border-radius: 0;
+}
+
+.solo-video--full-width {
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .solo-video__player {
@@ -438,6 +457,16 @@
   "class": "section-solo-video",
   "settings": [
     {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        { "value": "dark", "label": "Dark" },
+        { "value": "light", "label": "Light" }
+      ],
+      "default": "dark"
+    },
+    {
       "type": "text",
       "id": "heading",
       "label": "Heading"
@@ -466,9 +495,16 @@
       "info": "Shown before a YouTube or Vimeo video loads"
     },
     {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width",
+      "default": false
+    },
+    {
       "type": "range",
       "id": "max_width",
       "label": "Max width",
+      "info": "Only applies when Full width is disabled",
       "min": 600,
       "max": 1600,
       "step": 40,
