@@ -81,8 +81,8 @@
       ],
       "name": "Portfolio Videos",
       "settings": {
-        "heading": "My Work",
-        "subheading": "A selection of recent projects"
+        "heading": "",
+        "subheading": ""
       }
     }
   },
