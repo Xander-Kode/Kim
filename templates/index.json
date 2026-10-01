@@ -25,9 +25,9 @@
         "video_item_EwanfC": {
           "type": "video_item",
           "settings": {
-            "video_url": "",
-            "title": "Project title",
-            "description": "A short description of this project.",
+            "video_url": "https://www.youtube.com/watch?v=iEVjdSz828E&list=RDiEVjdSz828E&start_radio=1",
+            "title": "together we will rise",
+            "description": "broolyn disco brings to ife the thpoughts of men and women around the world",
             "link": "",
             "loop": false
           }
