@@ -2,6 +2,30 @@
   {%- for block in section.blocks -%}
     {{ block.settings.title_font | font_face }}
     {{ block.settings.subtitle_font | font_face }}
+    {%- unless block.settings.title_font == blank and block.settings.title_size == blank -%}
+    #pv-block-{{ block.id }} .portfolio-videos__title {
+      {%- unless block.settings.title_font == blank -%}
+      font-family: {{ block.settings.title_font.family }}, {{ block.settings.title_font.fallback_families }};
+      font-weight: {{ block.settings.title_font.weight }};
+      font-style: {{ block.settings.title_font.style }};
+      {%- endunless -%}
+      {%- unless block.settings.title_size == blank -%}
+      font-size: {{ block.settings.title_size }};
+      {%- endunless -%}
+    }
+    {%- endunless -%}
+    {%- unless block.settings.subtitle_font == blank and block.settings.subtitle_size == blank -%}
+    #pv-block-{{ block.id }} .portfolio-videos__subtitle {
+      {%- unless block.settings.subtitle_font == blank -%}
+      font-family: {{ block.settings.subtitle_font.family }}, {{ block.settings.subtitle_font.fallback_families }};
+      font-weight: {{ block.settings.subtitle_font.weight }};
+      font-style: {{ block.settings.subtitle_font.style }};
+      {%- endunless -%}
+      {%- unless block.settings.subtitle_size == blank -%}
+      font-size: {{ block.settings.subtitle_size }};
+      {%- endunless -%}
+    }
+    {%- endunless -%}
   {%- endfor -%}
 {%- endstyle -%}
 
@@ -23,18 +47,9 @@
   <div class="portfolio-videos__grid">
     {%- for block in section.blocks -%}
       <article
+        id="pv-block-{{ block.id }}"
         class="portfolio-videos__item portfolio-videos__item--{{ forloop.index }}"
         {{ block.shopify_attributes }}
-        style="
-          --pv-title-family: {{ block.settings.title_font.family }}, {{ block.settings.title_font.fallback_families }};
-          --pv-title-weight: {{ block.settings.title_font.weight }};
-          --pv-title-style: {{ block.settings.title_font.style }};
-          --pv-title-size: {{ block.settings.title_size }};
-          --pv-subtitle-family: {{ block.settings.subtitle_font.family }}, {{ block.settings.subtitle_font.fallback_families }};
-          --pv-subtitle-weight: {{ block.settings.subtitle_font.weight }};
-          --pv-subtitle-style: {{ block.settings.subtitle_font.style }};
-          --pv-subtitle-size: {{ block.settings.subtitle_size }};
-        "
       >
         <div class="portfolio-videos__media">
           {%- if block.settings.video != blank -%}
@@ -349,20 +364,16 @@
 }
 
 .portfolio-videos__title {
-  font-family: var(--pv-title-family, inherit);
-  font-size: var(--pv-title-size, 1.375rem);
-  font-weight: var(--pv-title-weight, 600);
-  font-style: var(--pv-title-style, normal);
+  font-size: 1.375rem;
+  font-weight: 600;
   margin: 0;
   line-height: 1.2;
   color: #fff;
 }
 
 .portfolio-videos__subtitle {
-  font-family: var(--pv-subtitle-family, inherit);
-  font-size: var(--pv-subtitle-size, 0.9375rem);
-  font-weight: var(--pv-subtitle-weight, 400);
-  font-style: var(--pv-subtitle-style, normal);
+  font-size: 0.9375rem;
+  font-weight: 400;
   color: rgba(255,255,255,0.7);
   margin: 0;
   line-height: 1.4;
