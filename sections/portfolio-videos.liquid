@@ -15,7 +15,24 @@
 
   <div class="portfolio-videos__grid">
     {%- for block in section.blocks -%}
-      <article class="portfolio-videos__item" {{ block.shopify_attributes }}>
+      {%- style -%}
+        {{ block.settings.title_font | font_face }}
+        {{ block.settings.subtitle_font | font_face }}
+      {%- endstyle -%}
+      <article
+        class="portfolio-videos__item"
+        {{ block.shopify_attributes }}
+        style="
+          --pv-title-family: {{ block.settings.title_font.family }}, {{ block.settings.title_font.fallback_families }};
+          --pv-title-weight: {{ block.settings.title_font.weight }};
+          --pv-title-style: {{ block.settings.title_font.style }};
+          --pv-title-size: {{ block.settings.title_size }};
+          --pv-subtitle-family: {{ block.settings.subtitle_font.family }}, {{ block.settings.subtitle_font.fallback_families }};
+          --pv-subtitle-weight: {{ block.settings.subtitle_font.weight }};
+          --pv-subtitle-style: {{ block.settings.subtitle_font.style }};
+          --pv-subtitle-size: {{ block.settings.subtitle_size }};
+        "
+      >
         <div class="portfolio-videos__media">
           {%- if block.settings.video != blank -%}
             <div class="portfolio-videos__hosted-player">
@@ -307,18 +324,19 @@
 
 .portfolio-videos__info {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 40px 20px 20px;
-  background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.78) 100%);
+  inset: 0;
+  padding: 20px;
+  background: rgba(0,0,0,0.45);
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: 6px;
   opacity: 0;
   transform: translateY(6px);
   transition: opacity 0.3s ease, transform 0.3s ease;
   pointer-events: none;
+  text-align: center;
 }
 
 .portfolio-videos__item:hover .portfolio-videos__info {
@@ -328,21 +346,23 @@
 }
 
 .portfolio-videos__title {
-  font-size: 0.9375rem;
-  font-weight: 600;
+  font-family: var(--pv-title-family, inherit);
+  font-size: var(--pv-title-size, 1.375rem);
+  font-weight: var(--pv-title-weight, 600);
+  font-style: var(--pv-title-style, normal);
   margin: 0;
-  line-height: 1.3;
+  line-height: 1.2;
   color: #fff;
 }
 
 .portfolio-videos__subtitle {
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: rgba(255,255,255,0.6);
+  font-family: var(--pv-subtitle-family, inherit);
+  font-size: var(--pv-subtitle-size, 0.9375rem);
+  font-weight: var(--pv-subtitle-weight, 400);
+  font-style: var(--pv-subtitle-style, normal);
+  color: rgba(255,255,255,0.7);
   margin: 0;
   line-height: 1.4;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
 }
 
 .portfolio-videos__description {
@@ -701,10 +721,50 @@
           "default": "Project title"
         },
         {
+          "type": "font_picker",
+          "id": "title_font",
+          "label": "Title font",
+          "default": "inter_n4"
+        },
+        {
+          "type": "select",
+          "id": "title_size",
+          "label": "Title size",
+          "options": [
+            { "value": "2.5rem", "label": "H1" },
+            { "value": "2rem", "label": "H2" },
+            { "value": "1.75rem", "label": "H3" },
+            { "value": "1.375rem", "label": "H4" },
+            { "value": "1.125rem", "label": "H5" },
+            { "value": "0.9375rem", "label": "H6" }
+          ],
+          "default": "1.375rem"
+        },
+        {
           "type": "text",
           "id": "subtitle",
           "label": "Sub project title",
           "default": "hello this is sub proj"
+        },
+        {
+          "type": "font_picker",
+          "id": "subtitle_font",
+          "label": "Sub title font",
+          "default": "inter_n4"
+        },
+        {
+          "type": "select",
+          "id": "subtitle_size",
+          "label": "Sub title size",
+          "options": [
+            { "value": "2.5rem", "label": "H1" },
+            { "value": "2rem", "label": "H2" },
+            { "value": "1.75rem", "label": "H3" },
+            { "value": "1.375rem", "label": "H4" },
+            { "value": "1.125rem", "label": "H5" },
+            { "value": "0.9375rem", "label": "H6" }
+          ],
+          "default": "0.9375rem"
         },
         {
           "type": "textarea",
