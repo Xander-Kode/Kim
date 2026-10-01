@@ -18,10 +18,10 @@
             "video_url": "https://www.youtube.com/watch?v=gIlVOXbglWM&list=RDPSBpgood_yQ&index=2",
             "title": "kims",
             "title_font": "abril_fatface_n4",
-            "title_size": "0.9375rem",
+            "title_size": "2.5rem",
             "subtitle": "hello this is sub proj",
-            "subtitle_font": "inter_n4",
-            "subtitle_size": "0.9375rem",
+            "subtitle_font": "serif",
+            "subtitle_size": "1.75rem",
             "description": "something worth dying for",
             "link": "",
             "loop": false
