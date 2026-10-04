@@ -348,6 +348,9 @@
   {% if sticky %}
     sticky="{{ sticky }}"
   {% endif %}
+  {% if section.settings.enable_vanish_on_scroll %}
+    data-vanish-on-scroll
+  {% endif %}
   data-skip-node-update
   data-scroll-direction="none"
   {% if section.settings.menu_row == 'top' and bottom_row_blocks.size > 0 %}
@@ -358,6 +361,9 @@
   {% endif %}
   {% if has_second_row == false %}
     data-header-rows="single"
+  {% endif %}
+  {% if section.settings.transparent_top_row %}
+    data-transparent-top-row
   {% endif %}
   style="
     --color-background-top-row: rgba({{ section.settings.background_color_top.rgba | default: settings.page_background_color.rgba }});
@@ -651,7 +657,7 @@
   }
 
   .header[data-sticky-state] {
-    transition: opacity var(--animation-speed) var(--animation-easing);
+    transition: opacity 0.9s ease;
     opacity: 1;
   }
 
@@ -749,6 +755,16 @@
       var(--color-background-top-row) 0 var(--top-row-height),
       var(--color-submenu) var(--top-row-height) 100%
     );
+  }
+
+  [data-transparent-top-row] .header__underlay-closed,
+  [data-transparent-top-row] .header__underlay-open {
+    transition: opacity 0.5s ease;
+  }
+
+  /* stylelint-disable-next-line declaration-no-important */
+  #header-component.header-scrolled-down .header__underlay {
+    opacity: 0 !important;
   }
 
   /* End Underlays ================ */
@@ -1232,6 +1248,16 @@
     font-family: var(--menu-localization-font);
     font-size: var(--menu-localization-font-size);
   }
+
+  #header-component[data-vanish-on-scroll] {
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+  }
+
+  #header-component[data-vanish-on-scroll='hidden'] {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
 {% endstylesheet %}
 
 {% unless request.design_mode %}
@@ -1242,6 +1268,43 @@
     hydrate('{{ section.id }}', url);
   </script>
 {% endunless %}
+
+{%- if section.settings.transparent_top_row -%}
+<script>
+(function () {
+  function getScrollTop() {
+    var pw = document.querySelector('.page-wrapper');
+    return Math.max(window.scrollY, pw ? pw.scrollTop : 0);
+  }
+  function applyTransparency() {
+    var hc = document.getElementById('header-component');
+    if (!hc) return;
+    hc.classList.toggle('header-scrolled-down', getScrollTop() > 60);
+  }
+  window.addEventListener('scroll', applyTransparency, { passive: true });
+  window.addEventListener('load', function () {
+    var pw = document.querySelector('.page-wrapper');
+    if (pw) pw.addEventListener('scroll', applyTransparency, { passive: true });
+    applyTransparency();
+  });
+  applyTransparency();
+})();
+</script>
+{%- endif -%}
+
+{%- if section.settings.enable_vanish_on_scroll -%}
+<script>
+(function () {
+  var hc = document.getElementById('header-component');
+  if (!hc) return;
+  function onScroll() {
+    hc.setAttribute('data-vanish-on-scroll', window.scrollY > 60 ? 'hidden' : 'visible');
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+{%- endif -%}
 
 {% schema %}
 {
@@ -1539,6 +1602,13 @@
       "default": "always"
     },
     {
+      "type": "checkbox",
+      "id": "enable_vanish_on_scroll",
+      "label": "Vanish on scroll",
+      "info": "Header fades out when the page scrolls. Works best with a transparent header enabled.",
+      "default": false
+    },
+    {
       "type": "range",
       "id": "divider_width",
       "label": "t:settings.divider_thickness",
@@ -1686,6 +1756,12 @@
       "id": "background_color_top",
       "label": "t:settings.top_row_background",
       "placeholder": "t:settings.default"
+    },
+    {
+      "type": "checkbox",
+      "id": "transparent_top_row",
+      "label": "Transparent top row background",
+      "default": false
     },
     {
       "type": "color",

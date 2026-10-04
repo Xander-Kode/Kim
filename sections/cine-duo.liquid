@@ -1,0 +1,541 @@
+<section
+  class="cine-duo cine-duo--{{ section.settings.color_scheme }}{% if section.settings.full_width %} cine-duo--full-width{% endif %}"
+  id="cine-duo-{{ section.id }}"
+  style="--cd-padding: {{ section.settings.section_padding }}px;"
+>
+  <div class="cine-duo__row">
+
+    {%- for i in (1..2) -%}
+      {%- liquid
+        if i == 1
+          assign vid = section.settings.video_1
+          assign vid_url = section.settings.video_url_1
+          assign thumb = section.settings.thumbnail_1
+        else
+          assign vid = section.settings.video_2
+          assign vid_url = section.settings.video_url_2
+          assign thumb = section.settings.thumbnail_2
+        endif
+      -%}
+
+      <div class="cine-duo__col">
+        {%- if vid != blank -%}
+          <div class="cine-duo__player cine-duo__player--hosted">
+            {{- vid | video_tag:
+              autoplay: true,
+              loop: true,
+              muted: true,
+              controls: false,
+              playsinline: true,
+              class: 'cine-duo__video'
+            -}}
+            <button class="cine-duo__btn cine-duo__btn--playpause" type="button" aria-pressed="true" aria-label="Pause video">
+              <span class="cd-icon-playing">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20" aria-hidden="true" focusable="false">
+                  <rect x="6" y="4" width="4" height="16" rx="1"/>
+                  <rect x="14" y="4" width="4" height="16" rx="1"/>
+                </svg>
+              </span>
+              <span class="cd-icon-paused">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20" aria-hidden="true" focusable="false">
+                  <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+              </span>
+            </button>
+            <button class="cine-duo__btn cine-duo__btn--sound" type="button" aria-pressed="false" aria-label="Unmute video">
+              <span class="cd-icon-muted">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true" focusable="false">
+                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                  <line x1="23" y1="9" x2="17" y2="15"/>
+                  <line x1="17" y1="9" x2="23" y2="15"/>
+                </svg>
+              </span>
+              <span class="cd-icon-sound">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true" focusable="false">
+                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                  <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                  <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                </svg>
+              </span>
+            </button>
+            <button class="cine-duo__btn cine-duo__btn--fullscreen" type="button" aria-pressed="false" aria-label="Enter fullscreen">
+              <span class="cd-icon-expand">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" aria-hidden="true" focusable="false">
+                  <path d="M8 3H5a2 2 0 0 0-2 2v3"/>
+                  <path d="M21 8V5a2 2 0 0 0-2-2h-3"/>
+                  <path d="M3 16v3a2 2 0 0 0 2 2h3"/>
+                  <path d="M16 21h3a2 2 0 0 0 2-2v-3"/>
+                </svg>
+              </span>
+              <span class="cd-icon-compress">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" aria-hidden="true" focusable="false">
+                  <path d="M8 3v3a2 2 0 0 1-2 2H3"/>
+                  <path d="M21 8h-3a2 2 0 0 1-2-2V3"/>
+                  <path d="M3 16h3a2 2 0 0 1 2 2v3"/>
+                  <path d="M16 21v-3a2 2 0 0 1 2-2h3"/>
+                </svg>
+              </span>
+            </button>
+          </div>
+
+        {%- elsif vid_url != blank -%}
+          <div
+            class="cine-duo__player cine-duo__player--external"
+            data-video-url="{{ vid_url.id }}"
+            data-video-provider="{{ vid_url.type }}"
+          >
+            <div class="cine-duo__thumb-wrap">
+              {%- if thumb != blank -%}
+                {{ thumb | image_url: width: 1200 | image_tag:
+                  loading: 'lazy',
+                  widths: '400, 600, 900, 1200',
+                  sizes: '(min-width: 750px) 50vw, 100vw',
+                  class: 'cine-duo__thumb-img'
+                }}
+              {%- else -%}
+                {{ 'collection-1' | placeholder_svg_tag: 'cine-duo__thumb-placeholder' }}
+              {%- endif -%}
+            </div>
+            <div class="cine-duo__iframe-wrap" hidden></div>
+          </div>
+
+        {%- else -%}
+          <div class="cine-duo__player cine-duo__player--empty">
+            {{ 'collection-2' | placeholder_svg_tag: 'cine-duo__placeholder-svg' }}
+          </div>
+        {%- endif -%}
+      </div>
+
+    {%- endfor -%}
+
+  </div>
+</section>
+
+{% style %}
+  #cine-duo-{{ section.id }} .cine-duo__row {
+    gap: {{ section.settings.gap }}px;
+  }
+  #cine-duo-{{ section.id }} {
+    padding: {{ section.settings.section_padding }}px{% unless section.settings.full_width %} 20px{% endunless %};
+  }
+{% endstyle %}
+
+{% stylesheet %}
+
+.cine-duo {
+  padding: var(--cd-padding, 0px) 20px;
+  background: #0f0f0f;
+}
+
+.cine-duo--light {
+  background: #ffffff;
+}
+
+.cine-duo--full-width {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.cine-duo__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 749px) {
+  .cine-duo__row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.cine-duo__col {
+  min-width: 0;
+}
+
+.cine-duo__player {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  overflow: hidden;
+}
+
+.cine-duo__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cine-duo__thumb-wrap {
+  position: absolute;
+  inset: 0;
+}
+
+.cine-duo__thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cine-duo__thumb-placeholder {
+  width: 100%;
+  height: 100%;
+  opacity: 0.3;
+}
+
+.cine-duo__iframe-wrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.cine-duo__iframe-wrap iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+.cine-duo__player--empty {
+  background: #1a1a1a;
+}
+
+.cine-duo__placeholder-svg {
+  width: 100%;
+  height: 100%;
+  opacity: 0.25;
+}
+
+.cine-duo__btn {
+  position: absolute;
+  bottom: 12px;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #fff;
+  z-index: 2;
+  transition: background 0.2s ease;
+}
+
+.cine-duo__btn:hover {
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.cine-duo__btn--playpause { left: 12px; }
+.cine-duo__btn--sound { left: 56px; }
+.cine-duo__btn--fullscreen { right: 12px; }
+
+.cine-duo__btn .cd-icon-playing,
+.cine-duo__btn .cd-icon-paused,
+.cine-duo__btn .cd-icon-muted,
+.cine-duo__btn .cd-icon-sound,
+.cine-duo__btn .cd-icon-expand,
+.cine-duo__btn .cd-icon-compress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cine-duo__btn--playpause[aria-pressed="true"] .cd-icon-paused { display: none; }
+.cine-duo__btn--playpause[aria-pressed="false"] .cd-icon-playing { display: none; }
+.cine-duo__btn--sound[aria-pressed="false"] .cd-icon-sound { display: none; }
+.cine-duo__btn--sound[aria-pressed="true"] .cd-icon-muted { display: none; }
+.cine-duo__btn--fullscreen[aria-pressed="false"] .cd-icon-compress { display: none; }
+.cine-duo__btn--fullscreen[aria-pressed="true"] .cd-icon-expand { display: none; }
+
+.cine-duo__player:fullscreen,
+.cine-duo__player:-webkit-full-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+}
+
+.cine-duo__player:fullscreen .cine-duo__video,
+.cine-duo__player:-webkit-full-screen .cine-duo__video {
+  width: 100vw;
+  height: 100vh;
+  object-fit: contain;
+}
+
+.cine-duo__player:fullscreen .cine-duo__iframe-wrap,
+.cine-duo__player:-webkit-full-screen .cine-duo__iframe-wrap {
+  position: absolute;
+  inset: 0;
+}
+
+.cine-duo__player:fullscreen .cine-duo__iframe-wrap iframe,
+.cine-duo__player:-webkit-full-screen .cine-duo__iframe-wrap iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: none;
+}
+
+{% endstylesheet %}
+
+{% javascript %}
+(function () {
+  function buildEmbedUrl(videoId, provider) {
+    if (provider === 'youtube' && videoId) {
+      return 'https://www.youtube.com/embed/' + videoId + '?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&playlist=' + videoId + '&enablejsapi=1&showinfo=0&iv_load_policy=3&fs=0&disablekb=1&cc_load_policy=0';
+    }
+    if (provider === 'vimeo' && videoId) {
+      return 'https://player.vimeo.com/video/' + videoId + '?autoplay=1&muted=1&loop=1&controls=0&title=0&byline=0&portrait=0&dnt=1';
+    }
+    return null;
+  }
+
+  function pmYT(iframe, func, args) {
+    iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: func, args: args || [] }), '*');
+  }
+
+  function pmVimeo(iframe, method, value) {
+    var msg = { method: method };
+    if (value !== undefined) msg.value = value;
+    iframe.contentWindow.postMessage(JSON.stringify(msg), '*');
+  }
+
+  function setPlayState(btn, playing) {
+    btn.setAttribute('aria-pressed', playing ? 'true' : 'false');
+    btn.setAttribute('aria-label', playing ? 'Pause video' : 'Play video');
+  }
+
+  function setSoundState(btn, soundOn) {
+    btn.setAttribute('aria-pressed', soundOn ? 'true' : 'false');
+    btn.setAttribute('aria-label', soundOn ? 'Mute video' : 'Unmute video');
+  }
+
+  function setupFullscreen(btn, el) {
+    btn.addEventListener('click', function () {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else if (el.requestFullscreen) {
+        el.requestFullscreen();
+      }
+    });
+    document.addEventListener('fullscreenchange', function () {
+      var isFs = document.fullscreenElement === el;
+      btn.setAttribute('aria-pressed', isFs ? 'true' : 'false');
+      btn.setAttribute('aria-label', isFs ? 'Exit fullscreen' : 'Enter fullscreen');
+    });
+  }
+
+  function initExternalPlayer(player) {
+    var embedUrl = buildEmbedUrl(player.dataset.videoUrl, player.dataset.videoProvider);
+    if (!embedUrl) return;
+
+    var provider = player.dataset.videoProvider;
+    var iframe = document.createElement('iframe');
+    iframe.src = embedUrl;
+    iframe.allow = 'autoplay; fullscreen; picture-in-picture';
+    iframe.setAttribute('allowfullscreen', '');
+
+    var iframeWrap = player.querySelector('.cine-duo__iframe-wrap');
+    var thumbWrap = player.querySelector('.cine-duo__thumb-wrap');
+
+    iframeWrap.appendChild(iframe);
+    iframeWrap.removeAttribute('hidden');
+    if (thumbWrap) thumbWrap.style.visibility = 'hidden';
+
+    var PP_PLAYING = '<span class="cd-icon-playing"><svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20" aria-hidden="true"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg></span>';
+    var PP_PAUSED  = '<span class="cd-icon-paused"><svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg></span>';
+    var SND_MUTED  = '<span class="cd-icon-muted"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg></span>';
+    var SND_ON     = '<span class="cd-icon-sound"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></span>';
+    var FS_EXPAND  = '<span class="cd-icon-expand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg></span>';
+    var FS_COMPRESS= '<span class="cd-icon-compress"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" aria-hidden="true"><path d="M8 3v3a2 2 0 0 1-2 2H3"/><path d="M21 8h-3a2 2 0 0 1-2-2V3"/><path d="M3 16h3a2 2 0 0 1 2 2v3"/><path d="M16 21v-3a2 2 0 0 1 2-2h3"/></svg></span>';
+
+    var ppBtn = document.createElement('button');
+    ppBtn.className = 'cine-duo__btn cine-duo__btn--playpause';
+    ppBtn.type = 'button';
+    ppBtn.setAttribute('aria-pressed', 'true');
+    ppBtn.setAttribute('aria-label', 'Pause video');
+    ppBtn.innerHTML = PP_PLAYING + PP_PAUSED;
+    player.appendChild(ppBtn);
+
+    ppBtn.addEventListener('click', function () {
+      var playing = ppBtn.getAttribute('aria-pressed') === 'true';
+      if (provider === 'youtube') {
+        pmYT(iframe, playing ? 'pauseVideo' : 'playVideo');
+      } else {
+        pmVimeo(iframe, playing ? 'pause' : 'play');
+      }
+      setPlayState(ppBtn, !playing);
+    });
+
+    var sndBtn = document.createElement('button');
+    sndBtn.className = 'cine-duo__btn cine-duo__btn--sound';
+    sndBtn.type = 'button';
+    sndBtn.setAttribute('aria-pressed', 'false');
+    sndBtn.setAttribute('aria-label', 'Unmute video');
+    sndBtn.innerHTML = SND_MUTED + SND_ON;
+    player.appendChild(sndBtn);
+
+    sndBtn.addEventListener('click', function () {
+      var soundOn = sndBtn.getAttribute('aria-pressed') === 'true';
+      if (provider === 'youtube') {
+        pmYT(iframe, soundOn ? 'mute' : 'unMute');
+        if (!soundOn) pmYT(iframe, 'setVolume', [100]);
+      } else {
+        pmVimeo(iframe, 'setVolume', soundOn ? 0 : 1);
+      }
+      setSoundState(sndBtn, !soundOn);
+    });
+
+    var fsBtn = document.createElement('button');
+    fsBtn.className = 'cine-duo__btn cine-duo__btn--fullscreen';
+    fsBtn.type = 'button';
+    fsBtn.setAttribute('aria-pressed', 'false');
+    fsBtn.setAttribute('aria-label', 'Enter fullscreen');
+    fsBtn.innerHTML = FS_EXPAND + FS_COMPRESS;
+    player.appendChild(fsBtn);
+    setupFullscreen(fsBtn, player);
+  }
+
+  function initHostedPlayer(player) {
+    var video = player.querySelector('video');
+    var ppBtn = player.querySelector('.cine-duo__btn--playpause');
+    var sndBtn = player.querySelector('.cine-duo__btn--sound');
+    var fsBtn = player.querySelector('.cine-duo__btn--fullscreen');
+
+    if (video && ppBtn) {
+      ppBtn.addEventListener('click', function () {
+        if (video.paused) { video.play(); } else { video.pause(); }
+      });
+      video.addEventListener('play', function () { setPlayState(ppBtn, true); });
+      video.addEventListener('pause', function () { setPlayState(ppBtn, false); });
+    }
+
+    if (video && sndBtn) {
+      sndBtn.addEventListener('click', function () {
+        if (video.muted) { video.volume = 1; video.muted = false; }
+        else { video.muted = true; }
+        setSoundState(sndBtn, !video.muted);
+      });
+    }
+
+    if (video && fsBtn) {
+      setupFullscreen(fsBtn, player);
+    }
+  }
+
+  function init() {
+    document.querySelectorAll('.cine-duo__player--external').forEach(initExternalPlayer);
+    document.querySelectorAll('.cine-duo__player--hosted').forEach(initHostedPlayer);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "16:9 Cine",
+  "tag": "section",
+  "class": "section-cine-duo",
+  "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        { "value": "dark", "label": "Dark" },
+        { "value": "light", "label": "Light" }
+      ],
+      "default": "dark"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "label": "Section padding",
+      "min": 0,
+      "max": 120,
+      "step": 8,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap between videos",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Video 1 (left)"
+    },
+    {
+      "type": "video",
+      "id": "video_1",
+      "label": "Shopify-hosted video"
+    },
+    {
+      "type": "video_url",
+      "id": "video_url_1",
+      "label": "YouTube / Vimeo URL",
+      "accept": ["youtube", "vimeo"],
+      "placeholder": "https://www.youtube.com/watch?v=..."
+    },
+    {
+      "type": "image_picker",
+      "id": "thumbnail_1",
+      "label": "Thumbnail",
+      "info": "Shown before a YouTube or Vimeo video loads"
+    },
+    {
+      "type": "header",
+      "content": "Video 2 (right)"
+    },
+    {
+      "type": "video",
+      "id": "video_2",
+      "label": "Shopify-hosted video"
+    },
+    {
+      "type": "video_url",
+      "id": "video_url_2",
+      "label": "YouTube / Vimeo URL",
+      "accept": ["youtube", "vimeo"],
+      "placeholder": "https://www.youtube.com/watch?v=..."
+    },
+    {
+      "type": "image_picker",
+      "id": "thumbnail_2",
+      "label": "Thumbnail",
+      "info": "Shown before a YouTube or Vimeo video loads"
+    }
+  ],
+  "presets": [
+    {
+      "name": "16:9 Cine"
+    }
+  ]
+}
+{% endschema %}

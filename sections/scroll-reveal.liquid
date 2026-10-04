@@ -1,0 +1,452 @@
+<div
+  class="scroll-reveal scroll-reveal--{{ section.settings.color_scheme }}"
+  id="scroll-reveal-{{ section.id }}"
+>
+
+  {%- style -%}
+    {{ section.settings.title_font | font_face }}
+    #scroll-reveal-{{ section.id }} .scroll-reveal__title {
+      font-family: {{ section.settings.title_font.family }}, {{ section.settings.title_font.fallback_families }};
+      font-weight: {{ section.settings.title_font.weight }};
+      font-style: {{ section.settings.title_font.style }};
+    }
+    {%- if section.settings.background_color != blank -%}
+      #scroll-reveal-{{ section.id }},
+      #scroll-reveal-{{ section.id }} .scroll-reveal__item {
+        background-color: {{ section.settings.background_color }};
+      }
+    {%- endif -%}
+  {%- endstyle -%}
+
+  {%- if section.settings.label != blank -%}
+    <div class="scroll-reveal__label-wrap">
+      <p class="scroll-reveal__label">{{ section.settings.label | escape }}</p>
+    </div>
+  {%- endif -%}
+
+  {%- for block in section.blocks -%}
+    {%- style -%}
+      {{ block.settings.title_font | font_face }}
+      #scroll-reveal-{{ section.id }} .scroll-reveal__item--{{ forloop.index0 }} .scroll-reveal__title {
+        font-family: {{ block.settings.title_font.family }}, {{ block.settings.title_font.fallback_families }};
+        font-weight: {{ block.settings.title_font.weight }};
+        font-style: {{ block.settings.title_font.style }};
+        font-size: {{ block.settings.title_size }}px;
+      }
+    {%- endstyle -%}
+    <div
+      class="scroll-reveal__item scroll-reveal__item--{{ forloop.index0 }}"
+      style="top: calc({{ forloop.index0 }} * 8px); z-index: {{ forloop.index }};{% if block.settings.background_color != blank %} background-color: {{ block.settings.background_color }};{% endif %}{% if block.settings.text_color != blank %} color: {{ block.settings.text_color }};{% endif %}"
+      {{ block.shopify_attributes }}
+    >
+      <div class="scroll-reveal__inner">
+
+        <div class="scroll-reveal__left">
+          <div class="scroll-reveal__panel-top">
+            {%- if block.settings.title != blank -%}
+              <h3 class="scroll-reveal__title">{{ block.settings.title | escape }}</h3>
+            {%- endif -%}
+            <span class="scroll-reveal__num">
+              {{- forloop.index | prepend: '0' | slice: -2, 2 -}}
+            </span>
+          </div>
+          <div class="scroll-reveal__panel-bottom">
+            {%- if block.settings.text != blank -%}
+              <p class="scroll-reveal__text">{{ block.settings.text | escape }}</p>
+            {%- endif -%}
+            <div class="scroll-reveal__tag-groups">
+              {%- assign _gl = block.settings.group_1_label -%}
+              {%- assign _has_group_tags = false -%}
+              {%- for _ti in (1..4) -%}
+                {%- assign _gt_key = 'group_1_tag_' | append: _ti -%}
+                {%- if block.settings[_gt_key] != blank -%}{%- assign _has_group_tags = true -%}{%- endif -%}
+              {%- endfor -%}
+              {%- if _gl != blank or _has_group_tags -%}
+                <div class="scroll-reveal__tag-group">
+                  {%- if _gl != blank -%}
+                    <span class="scroll-reveal__tag-group-label">{{ _gl | escape }}</span>
+                  {%- endif -%}
+                  <div class="scroll-reveal__tags">
+                    {%- for _ti in (1..4) -%}
+                      {%- assign _gt_key = 'group_1_tag_' | append: _ti -%}
+                      {%- assign _gtv = block.settings[_gt_key] -%}
+                      {%- if _gtv != blank -%}
+                        <span class="scroll-reveal__tag">{{ _gtv | escape }}</span>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </div>
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+
+        <div class="scroll-reveal__right">
+          {%- if block.settings.shopify_video != blank -%}
+            {{- block.settings.shopify_video | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, class: 'scroll-reveal__media-video' -}}
+          {%- elsif block.settings.video_url != blank -%}
+            <video autoplay loop muted playsinline class="scroll-reveal__media-video">
+              <source src="{{ block.settings.video_url }}" type="video/mp4">
+            </video>
+          {%- elsif block.settings.image != blank -%}
+            {{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', class: 'scroll-reveal__media-img' }}
+          {%- endif -%}
+        </div>
+
+      </div>
+    </div>
+  {%- endfor -%}
+
+  <div class="scroll-reveal__spacer" aria-hidden="true"></div>
+
+</div>
+
+{% stylesheet %}
+
+.scroll-reveal {
+  position: relative;
+}
+
+.scroll-reveal__spacer {
+  height: 20vh;
+}
+
+.scroll-reveal--dark {
+  background: #0a0a0a;
+  color: #f0f0f0;
+}
+
+.scroll-reveal--light {
+  background: #f5f5f3;
+  color: #0a0a0a;
+}
+
+.scroll-reveal__label-wrap {
+  position: sticky;
+  top: 0;
+  height: 0;
+  z-index: 999;
+  pointer-events: none;
+}
+
+.scroll-reveal__label {
+  position: absolute;
+  top: 36px;
+  left: 8vw;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.35;
+  margin: 0;
+}
+
+.scroll-reveal__item {
+  position: sticky;
+  height: 100vh;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.scroll-reveal--dark .scroll-reveal__item {
+  background: #0a0a0a;
+  color: #f0f0f0;
+}
+
+.scroll-reveal--light .scroll-reveal__item {
+  background: #f5f5f3;
+  color: #0a0a0a;
+}
+
+.scroll-reveal__inner {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 6vw;
+  padding: 80px 8vw 12vh;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+}
+
+.scroll-reveal__left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 0;
+  order: 0;
+}
+
+.scroll-reveal__panel-top {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.scroll-reveal__panel-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.scroll-reveal__num {
+  font-size: clamp(4rem, 9vw, 8rem);
+  font-weight: 800;
+  line-height: 1;
+  opacity: 0.1;
+  letter-spacing: -0.04em;
+}
+
+.scroll-reveal__title {
+  font-size: clamp(1.6rem, 3.5vw, 3rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.scroll-reveal__text {
+  font-size: clamp(0.9rem, 1.4vw, 1.05rem);
+  line-height: 1.75;
+  opacity: 0.55;
+  margin: 0;
+  max-width: 500px;
+}
+
+.scroll-reveal__tag-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.scroll-reveal__tag-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.scroll-reveal__tag-group-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.35;
+}
+
+.scroll-reveal__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.scroll-reveal__tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 5px 14px;
+  opacity: 0.45;
+  width: fit-content;
+}
+
+.scroll-reveal__right {
+  flex: 1;
+  display: grid;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(128, 128, 128, 0.08);
+  height: calc(100vh - 160px);
+  align-self: center;
+  min-width: 0;
+  order: 1;
+}
+
+.scroll-reveal__right img,
+.scroll-reveal__right video,
+.scroll-reveal__media-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.scroll-reveal__right video,
+.scroll-reveal__media-video {
+  object-fit: contain;
+  background: #000;
+}
+
+.scroll-reveal__right .media {
+  width: 100%;
+  height: 100%;
+}
+
+.scroll-reveal__right .media video {
+  object-fit: contain;
+  background: #000;
+}
+
+@media (max-width: 749px) {
+  .scroll-reveal__inner {
+    flex-direction: column;
+    justify-content: center;
+    gap: 24px;
+  }
+  .scroll-reveal__right {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    align-self: auto;
+    flex: 0 0 auto;
+  }
+  .scroll-reveal__num {
+    font-size: 3.5rem;
+  }
+}
+
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Scroll Reveal",
+  "tag": "div",
+  "class": "section-scroll-reveal",
+  "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        { "value": "dark", "label": "Dark" },
+        { "value": "light", "label": "Light" }
+      ],
+      "default": "dark"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Section label",
+      "placeholder": "What we do"
+    },
+    {
+      "type": "font_picker",
+      "id": "title_font",
+      "label": "Title font",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color override"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Adoption and change"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Description",
+          "default": "We help organizations navigate transformation by building the right structures, habits, and culture for lasting change."
+        },
+        {
+          "type": "header",
+          "content": "Group 1"
+        },
+        {
+          "type": "text",
+          "id": "group_1_label",
+          "label": "Group 1 label",
+          "placeholder": "Tools"
+        },
+        {
+          "type": "text",
+          "id": "group_1_tag_1",
+          "label": "Tag 1",
+          "placeholder": "Figma"
+        },
+        {
+          "type": "text",
+          "id": "group_1_tag_2",
+          "label": "Tag 2",
+          "placeholder": "Shopify"
+        },
+        {
+          "type": "text",
+          "id": "group_1_tag_3",
+          "label": "Tag 3",
+          "placeholder": "Webflow"
+        },
+        {
+          "type": "text",
+          "id": "group_1_tag_4",
+          "label": "Tag 4",
+          "placeholder": "After Effects"
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "Background color"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color"
+        },
+        {
+          "type": "font_picker",
+          "id": "title_font",
+          "label": "Title font",
+          "default": "assistant_n4"
+        },
+        {
+          "type": "range",
+          "id": "title_size",
+          "label": "Title size",
+          "min": 16,
+          "max": 80,
+          "step": 2,
+          "unit": "px",
+          "default": 48
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Right panel image"
+        },
+        {
+          "type": "video",
+          "id": "shopify_video",
+          "label": "Right panel video (Shopify hosted)"
+        },
+        {
+          "type": "text",
+          "id": "video_url",
+          "label": "Right panel video URL (external)",
+          "placeholder": "https://cdn.shopify.com/..."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Scroll Reveal",
+      "blocks": [
+        { "type": "item", "settings": { "title": "Adoption and change", "group_1_label": "Services", "group_1_tag_1": "Strategy", "group_1_tag_2": "Design" } },
+        { "type": "item", "settings": { "title": "Brand identity", "group_1_label": "Tools", "group_1_tag_1": "Figma", "group_1_tag_2": "Shopify" } },
+        { "type": "item", "settings": { "title": "Digital experience", "group_1_label": "Services", "group_1_tag_1": "Development", "group_1_tag_2": "UX" } },
+        { "type": "item", "settings": { "title": "Growth and scale", "group_1_label": "Services", "group_1_tag_1": "Marketing", "group_1_tag_2": "Analytics" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

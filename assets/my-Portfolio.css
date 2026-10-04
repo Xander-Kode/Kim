@@ -1,0 +1,306 @@
+/* ─── Section wrapper ─── */
+
+.my-portfolio {
+  position: relative;
+  overflow: hidden;
+  background: #0a0a0a;
+  color: #f0f0f0;
+}
+
+/* ─── Intro panel (absolute, left overlay) ─── */
+
+.my-portfolio__intro {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 42%;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 32px 40px 32px 48px;
+  background: #0a0a0a;
+  box-sizing: border-box;
+}
+
+.my-portfolio__heading {
+  margin: 0 0 16px;
+  font-size: clamp(1.6rem, 3vw, 3rem);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: #fff;
+  max-width: 420px;
+}
+
+.my-portfolio__description {
+  margin: 0;
+  font-size: clamp(0.85rem, 1.1vw, 1rem);
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.45);
+  max-width: 340px;
+}
+
+/* ─── Fade gradients ─── */
+
+.my-portfolio__fade {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 192px;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.my-portfolio__fade--left {
+  left: 0;
+  background: linear-gradient(to right, #0a0a0a 0%, transparent 100%);
+}
+
+.my-portfolio__fade--right {
+  right: 0;
+  background: linear-gradient(to left, #0a0a0a 0%, transparent 100%);
+}
+
+/* ─── Scrollable track ─── */
+
+.my-portfolio__track-wrap {
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+  transform: translateX(50vw);
+  padding: 28px 0;
+}
+
+.my-portfolio__track-wrap::-webkit-scrollbar {
+  display: none;
+}
+
+.my-portfolio__strip {
+  display: flex;
+  align-items: stretch;
+  gap: 20px;
+  padding-right: 20px;
+  flex-shrink: 0;
+}
+
+/* ─── Card shared ─── */
+
+.my-portfolio__card {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #111;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+}
+
+/* ─── Social card (9:16) ─── */
+
+.my-portfolio__card--social {
+  width: 280px;
+  height: 500px;
+}
+
+/* ─── Cinematic pair ─── */
+
+.my-portfolio__card--pair {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 440px;
+  height: 500px;
+  background: transparent;
+  border: none;
+  overflow: visible;
+}
+
+.my-portfolio__pair-clip {
+  flex: 1;
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+}
+
+/* ─── Media layer ─── */
+
+.my-portfolio__media {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.7s ease-out;
+}
+
+.my-portfolio__card--social:hover .my-portfolio__media,
+.my-portfolio__pair-clip:hover .my-portfolio__media {
+  transform: scale(1.05);
+}
+
+.my-portfolio__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ─── YouTube ─── */
+
+.my-portfolio__yt-wrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.my-portfolio__yt-wrap iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 0;
+  pointer-events: none;
+}
+
+/* ─── Gradient overlay ─── */
+
+.my-portfolio__gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.82) 0%,
+    rgba(0, 0, 0, 0.18) 45%,
+    rgba(0, 0, 0, 0.08) 100%
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ─── Play button overlay ─── */
+
+.my-portfolio__play-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.28s ease;
+  pointer-events: none;
+}
+
+.my-portfolio__card--social:hover .my-portfolio__play-overlay,
+.my-portfolio__pair-clip:hover .my-portfolio__play-overlay {
+  opacity: 1;
+}
+
+.my-portfolio__play-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: scale(0.88);
+  transition: transform 0.28s ease;
+}
+
+.my-portfolio__card--social:hover .my-portfolio__play-btn,
+.my-portfolio__pair-clip:hover .my-portfolio__play-btn {
+  transform: scale(1);
+}
+
+.my-portfolio__play-btn--sm {
+  width: 40px;
+  height: 40px;
+}
+
+.my-portfolio__play-icon {
+  width: 18px;
+  height: 18px;
+  fill: #fff;
+  margin-left: 2px;
+  flex-shrink: 0;
+}
+
+/* ─── Info overlay ─── */
+
+.my-portfolio__info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  padding: 20px;
+}
+
+.my-portfolio__title {
+  margin: 0 0 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.my-portfolio__title--sm {
+  font-size: 0.82rem;
+}
+
+.my-portfolio__subtitle {
+  margin: 0;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.48);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ─── Responsive ─── */
+
+@media (max-width: 749px) {
+  .my-portfolio__intro {
+    position: relative;
+    width: 100%;
+    top: auto;
+    bottom: auto;
+    left: auto;
+    padding: 32px 20px 24px;
+  }
+
+  .my-portfolio__track-wrap {
+    transform: none;
+  }
+
+  .my-portfolio__card--social {
+    width: 220px;
+    height: 390px;
+  }
+
+  .my-portfolio__card--pair {
+    width: 320px;
+    height: 390px;
+    gap: 12px;
+  }
+
+  .my-portfolio__strip {
+    gap: 12px;
+    padding-right: 12px;
+  }
+
+  .my-portfolio__fade {
+    width: 60px;
+  }
+}
