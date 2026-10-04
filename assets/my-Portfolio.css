@@ -1,15 +1,13 @@
-/* ─── Section wrapper ─── */
-
-.my-portfolio {
+/* ── Section wrapper ── */
+.mp-section {
   position: relative;
   overflow: hidden;
-  background: #0a0a0a;
-  color: #f0f0f0;
+  background: #09090b;
+  padding: 64px 0;
 }
 
-/* ─── Intro panel (absolute, left overlay) ─── */
-
-.my-portfolio__intro {
+/* ── Intro panel (left, absolutely positioned) ── */
+.mp-intro {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -19,32 +17,31 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 32px 40px 32px 48px;
-  background: #0a0a0a;
+  padding: 32px 48px 32px 48px;
+  background: #09090b;
   box-sizing: border-box;
 }
 
-.my-portfolio__heading {
-  margin: 0 0 16px;
-  font-size: clamp(1.6rem, 3vw, 3rem);
+.mp-intro__heading {
+  max-width: 380px;
+  font-size: clamp(1.5rem, 3vw, 3rem);
   font-weight: 500;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-  color: #fff;
-  max-width: 420px;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  color: #ffffff;
+  margin: 0 0 16px;
 }
 
-.my-portfolio__description {
-  margin: 0;
-  font-size: clamp(0.85rem, 1.1vw, 1rem);
-  line-height: 1.65;
-  color: rgba(255, 255, 255, 0.45);
+.mp-intro__desc {
   max-width: 340px;
+  font-size: clamp(0.85rem, 1vw, 1rem);
+  line-height: 1.65;
+  color: #a1a1aa;
+  margin: 0;
 }
 
-/* ─── Fade gradients ─── */
-
-.my-portfolio__fade {
+/* ── Fade gradients ── */
+.mp-fade {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -53,254 +50,284 @@
   pointer-events: none;
 }
 
-.my-portfolio__fade--left {
+.mp-fade--l {
   left: 0;
-  background: linear-gradient(to right, #0a0a0a 0%, transparent 100%);
+  background: linear-gradient(to right, #09090b 0%, rgba(9,9,11,0.2) 60%, transparent 100%);
 }
 
-.my-portfolio__fade--right {
+.mp-fade--r {
   right: 0;
-  background: linear-gradient(to left, #0a0a0a 0%, transparent 100%);
+  background: linear-gradient(to left, #09090b 0%, rgba(9,9,11,0.2) 60%, transparent 100%);
 }
 
-/* ─── Scrollable track ─── */
-
-.my-portfolio__track-wrap {
+/* ── Scroll track ── */
+.mp-track {
   display: flex;
   overflow-x: auto;
   scrollbar-width: none;
+  -ms-overflow-style: none;
   transform: translateX(50vw);
   padding: 28px 0;
+  cursor: grab;
 }
 
-.my-portfolio__track-wrap::-webkit-scrollbar {
+.mp-track::-webkit-scrollbar {
   display: none;
 }
 
-.my-portfolio__strip {
+.mp-track:active {
+  cursor: grabbing;
+}
+
+/* ── Strip (one copy of all cards) ── */
+.mp-strip {
   display: flex;
-  align-items: stretch;
-  gap: 20px;
-  padding-right: 20px;
+  align-items: center;
+  gap: 24px;
+  padding-right: 24px;
   flex-shrink: 0;
+  width: max-content;
 }
 
-/* ─── Card shared ─── */
-
-.my-portfolio__card {
+/* ── Social card ── */
+.mp-social {
   position: relative;
-  border-radius: 20px;
+  width: 288px;
+  height: 512px;
+  border-radius: 24px;
   overflow: hidden;
-  background: #111;
   flex-shrink: 0;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  cursor: pointer;
+  background: #18181b;
+  border: 1px solid rgba(255,255,255,0.05);
 }
 
-/* ─── Social card (9:16) ─── */
-
-.my-portfolio__card--social {
-  width: 280px;
-  height: 500px;
-}
-
-/* ─── Cinematic pair ─── */
-
-.my-portfolio__card--pair {
+/* ── Cinematic pair wrapper ── */
+.mp-pair {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  width: 440px;
-  height: 500px;
+  gap: 24px;
+  width: 448px;
+  height: 512px;
+  flex-shrink: 0;
   background: transparent;
-  border: none;
-  overflow: visible;
 }
 
-.my-portfolio__pair-clip {
-  flex: 1;
+/* ── Individual clip inside a pair ── */
+.mp-clip {
   position: relative;
-  border-radius: 20px;
+  flex: 1;
+  border-radius: 24px;
   overflow: hidden;
-  background: #111;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  cursor: pointer;
+  background: #18181b;
+  border: 1px solid rgba(255,255,255,0.05);
 }
 
-/* ─── Media layer ─── */
-
-.my-portfolio__media {
+/* ── Background image layer (scales on hover) ── */
+.mp-bg {
   position: absolute;
   inset: 0;
   background-size: cover;
   background-position: center;
+  background-color: #18181b;
   transition: transform 0.7s ease-out;
 }
 
-.my-portfolio__card--social:hover .my-portfolio__media,
-.my-portfolio__pair-clip:hover .my-portfolio__media {
-  transform: scale(1.05);
-}
-
-.my-portfolio__video {
+.mp-video {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
 }
 
-/* ─── YouTube ─── */
-
-.my-portfolio__yt-wrap {
+.mp-yt {
   position: absolute;
   inset: 0;
-  overflow: hidden;
 }
 
-.my-portfolio__yt-wrap iframe {
+.mp-yt iframe {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  border: 0;
+  border: none;
   pointer-events: none;
 }
 
-/* ─── Gradient overlay ─── */
-
-.my-portfolio__gradient {
+/* ── Gradient overlay ── */
+.mp-gradient {
   position: absolute;
   inset: 0;
   background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.82) 0%,
-    rgba(0, 0, 0, 0.18) 45%,
-    rgba(0, 0, 0, 0.08) 100%
+    to bottom,
+    rgba(0,0,0,0.6) 0%,
+    rgba(0,0,0,0.1) 40%,
+    rgba(0,0,0,0.05) 60%,
+    rgba(0,0,0,0.7) 100%
   );
   z-index: 1;
-  pointer-events: none;
 }
 
-/* ─── Play button overlay ─── */
-
-.my-portfolio__play-overlay {
+/* ── Content overlay ── */
+.mp-overlay {
   position: absolute;
   inset: 0;
-  z-index: 3;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 2;
+  box-sizing: border-box;
+}
+
+.mp-overlay__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.mp-overlay__bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* ── Ratio badge ── */
+.mp-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* ── Play button (hidden, appears on hover) ── */
+.mp-play {
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
-  transition: opacity 0.28s ease;
-  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 3;
 }
 
-.my-portfolio__card--social:hover .my-portfolio__play-overlay,
-.my-portfolio__pair-clip:hover .my-portfolio__play-overlay {
-  opacity: 1;
-}
-
-.my-portfolio__play-btn {
-  width: 52px;
-  height: 52px;
+.mp-play__btn {
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.22);
   display: flex;
   align-items: center;
   justify-content: center;
-  transform: scale(0.88);
-  transition: transform 0.28s ease;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,255,255,0.2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
 }
 
-.my-portfolio__card--social:hover .my-portfolio__play-btn,
-.my-portfolio__pair-clip:hover .my-portfolio__play-btn {
+.mp-play__btn--sm {
+  width: 44px;
+  height: 44px;
+}
+
+.mp-play__btn svg {
+  width: 24px;
+  height: 24px;
+  fill: #ffffff;
+  margin-left: 3px;
+}
+
+.mp-play__btn--sm svg {
+  width: 16px;
+  height: 16px;
+  margin-left: 2px;
+}
+
+/* ── Title / subtitle ── */
+.mp-title {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.3;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+}
+
+.mp-title--sm {
+  font-size: 0.8rem;
+}
+
+.mp-subtitle {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.6);
+  margin: 0;
+  line-height: 1.3;
+}
+
+/* ── Hover effects ── */
+.mp-social:hover .mp-bg,
+.mp-clip:hover .mp-bg {
+  transform: scale(1.05);
+}
+
+.mp-social:hover .mp-play,
+.mp-clip:hover .mp-play {
+  opacity: 1;
+}
+
+.mp-social:hover .mp-play__btn,
+.mp-clip:hover .mp-play__btn {
   transform: scale(1);
 }
 
-.my-portfolio__play-btn--sm {
-  width: 40px;
-  height: 40px;
-}
-
-.my-portfolio__play-icon {
-  width: 18px;
-  height: 18px;
-  fill: #fff;
-  margin-left: 2px;
-  flex-shrink: 0;
-}
-
-/* ─── Info overlay ─── */
-
-.my-portfolio__info {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 2;
-  padding: 20px;
-}
-
-.my-portfolio__title {
-  margin: 0 0 4px;
-  font-size: 1rem;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  color: #fff;
-  line-height: 1.2;
-}
-
-.my-portfolio__title--sm {
-  font-size: 0.82rem;
-}
-
-.my-portfolio__subtitle {
-  margin: 0;
-  font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.48);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* ─── Responsive ─── */
-
+/* ── Mobile ── */
 @media (max-width: 749px) {
-  .my-portfolio__intro {
+  .mp-section {
+    padding: 40px 0 0;
+  }
+
+  .mp-intro {
     position: relative;
     width: 100%;
-    top: auto;
     bottom: auto;
-    left: auto;
-    padding: 32px 20px 24px;
+    padding: 0 24px 32px;
+    background: transparent;
   }
 
-  .my-portfolio__track-wrap {
-    transform: none;
+  .mp-track {
+    transform: none !important;
   }
 
-  .my-portfolio__card--social {
+  .mp-fade--l {
+    width: 24px;
+  }
+
+  .mp-fade--r {
+    width: 24px;
+  }
+
+  .mp-social {
     width: 220px;
     height: 390px;
   }
 
-  .my-portfolio__card--pair {
-    width: 320px;
+  .mp-pair {
+    width: 340px;
     height: 390px;
-    gap: 12px;
+    gap: 16px;
   }
 
-  .my-portfolio__strip {
-    gap: 12px;
-    padding-right: 12px;
-  }
-
-  .my-portfolio__fade {
-    width: 60px;
+  .mp-strip {
+    gap: 16px;
+    padding-right: 16px;
   }
 }

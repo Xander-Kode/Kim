@@ -1,0 +1,325 @@
+{{ 'my-Portfolio.css' | asset_url | stylesheet_tag }}
+
+<div
+  class="mp-section"
+  id="mp-{{ section.id }}"
+  data-speed="{{ section.settings.speed }}"
+>
+
+  <div class="mp-intro" id="mp-intro-{{ section.id }}">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="mp-intro__heading">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+    {%- if section.settings.description != blank -%}
+      <p class="mp-intro__desc">{{ section.settings.description | escape }}</p>
+    {%- endif -%}
+  </div>
+
+  <div class="mp-fade mp-fade--l"></div>
+  <div class="mp-fade mp-fade--r"></div>
+
+  <div class="mp-track" id="mp-track-{{ section.id }}">
+
+    {%- for _pass in (1..2) -%}
+      <div class="mp-strip"{% if forloop.index == 2 %} aria-hidden="true"{% endif %}>
+
+        {%- for block in section.blocks -%}
+
+          {%- if block.type == 'social' -%}
+
+            <div class="mp-card mp-social" {{ block.shopify_attributes }}>
+              <div
+                class="mp-bg"
+                {%- if block.settings.poster != blank -%}
+                  style="background-image: url('{{ block.settings.poster | image_url: width: 800 }}');"
+                {%- endif -%}
+              >
+                {%- if block.settings.source_type == 'youtube' and block.settings.youtube_url != blank -%}
+                  <div class="mp-yt" data-yt-input="{{ block.settings.youtube_url | escape }}"></div>
+                {%- elsif block.settings.video != blank -%}
+                  {{- block.settings.video | video_tag: loop: true, muted: true, controls: false, playsinline: true, class: 'mp-video' -}}
+                {%- endif -%}
+              </div>
+              <div class="mp-gradient"></div>
+              <div class="mp-overlay">
+                <div class="mp-overlay__top">
+                  {%- if block.settings.ratio != blank -%}
+                    <span class="mp-badge">{{ block.settings.ratio | escape }}</span>
+                  {%- endif -%}
+                </div>
+                <div class="mp-play">
+                  <div class="mp-play__btn">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 5.14v14l11-7-11-7z"/></svg>
+                  </div>
+                </div>
+                <div class="mp-overlay__bottom">
+                  {%- if block.settings.title != blank -%}
+                    <p class="mp-title">{{ block.settings.title | escape }}</p>
+                  {%- endif -%}
+                  {%- if block.settings.subtitle != blank -%}
+                    <p class="mp-subtitle">{{ block.settings.subtitle | escape }}</p>
+                  {%- endif -%}
+                </div>
+              </div>
+            </div>
+
+          {%- elsif block.type == 'cinematic_pair' -%}
+
+            <div class="mp-pair" {{ block.shopify_attributes }}>
+
+              <div class="mp-clip">
+                <div
+                  class="mp-bg"
+                  {%- if block.settings.poster_1 != blank -%}
+                    style="background-image: url('{{ block.settings.poster_1 | image_url: width: 800 }}');"
+                  {%- endif -%}
+                >
+                  {%- if block.settings.source_type_1 == 'youtube' and block.settings.youtube_url_1 != blank -%}
+                    <div class="mp-yt" data-yt-input="{{ block.settings.youtube_url_1 | escape }}"></div>
+                  {%- elsif block.settings.video_1 != blank -%}
+                    {{- block.settings.video_1 | video_tag: loop: true, muted: true, controls: false, playsinline: true, class: 'mp-video' -}}
+                  {%- endif -%}
+                </div>
+                <div class="mp-gradient"></div>
+                <div class="mp-overlay">
+                  <div class="mp-overlay__top">
+                    {%- if block.settings.ratio_1 != blank -%}
+                      <span class="mp-badge">{{ block.settings.ratio_1 | escape }}</span>
+                    {%- endif -%}
+                  </div>
+                  <div class="mp-play">
+                    <div class="mp-play__btn mp-play__btn--sm">
+                      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 5.14v14l11-7-11-7z"/></svg>
+                    </div>
+                  </div>
+                  <div class="mp-overlay__bottom">
+                    {%- if block.settings.title_1 != blank -%}
+                      <p class="mp-title mp-title--sm">{{ block.settings.title_1 | escape }}</p>
+                    {%- endif -%}
+                  </div>
+                </div>
+              </div>
+
+              <div class="mp-clip">
+                <div
+                  class="mp-bg"
+                  {%- if block.settings.poster_2 != blank -%}
+                    style="background-image: url('{{ block.settings.poster_2 | image_url: width: 800 }}');"
+                  {%- endif -%}
+                >
+                  {%- if block.settings.source_type_2 == 'youtube' and block.settings.youtube_url_2 != blank -%}
+                    <div class="mp-yt" data-yt-input="{{ block.settings.youtube_url_2 | escape }}"></div>
+                  {%- elsif block.settings.video_2 != blank -%}
+                    {{- block.settings.video_2 | video_tag: loop: true, muted: true, controls: false, playsinline: true, class: 'mp-video' -}}
+                  {%- endif -%}
+                </div>
+                <div class="mp-gradient"></div>
+                <div class="mp-overlay">
+                  <div class="mp-overlay__top">
+                    {%- if block.settings.ratio_2 != blank -%}
+                      <span class="mp-badge">{{ block.settings.ratio_2 | escape }}</span>
+                    {%- endif -%}
+                  </div>
+                  <div class="mp-play">
+                    <div class="mp-play__btn mp-play__btn--sm">
+                      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 5.14v14l11-7-11-7z"/></svg>
+                    </div>
+                  </div>
+                  <div class="mp-overlay__bottom">
+                    {%- if block.settings.title_2 != blank -%}
+                      <p class="mp-title mp-title--sm">{{ block.settings.title_2 | escape }}</p>
+                    {%- endif -%}
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          {%- endif -%}
+
+        {%- endfor -%}
+
+      </div>
+    {%- endfor -%}
+
+  </div>
+
+</div>
+
+<script src="{{ 'my-Portfolio.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "My Portfolio",
+  "tag": "div",
+  "class": "section-my-portfolio",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Stories in motion."
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Discover a new perspective through films from visionary creators."
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Scroll speed",
+      "min": 20,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 50
+    }
+  ],
+  "blocks": [
+    {
+      "type": "social",
+      "name": "Social tile",
+      "settings": [
+        {
+          "type": "select",
+          "id": "source_type",
+          "label": "Source",
+          "options": [
+            { "value": "upload", "label": "Upload" },
+            { "value": "youtube", "label": "YouTube" }
+          ],
+          "default": "upload"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video (upload)"
+        },
+        {
+          "type": "text",
+          "id": "youtube_url",
+          "label": "YouTube URL or ID",
+          "placeholder": "https://www.youtube.com/watch?v=..."
+        },
+        {
+          "type": "image_picker",
+          "id": "poster",
+          "label": "Poster image"
+        },
+        {
+          "type": "text",
+          "id": "ratio",
+          "label": "Ratio badge",
+          "placeholder": "9:16"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle"
+        }
+      ]
+    },
+    {
+      "type": "cinematic_pair",
+      "name": "Cinematic pair",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Clip 1"
+        },
+        {
+          "type": "select",
+          "id": "source_type_1",
+          "label": "Source",
+          "options": [
+            { "value": "upload", "label": "Upload" },
+            { "value": "youtube", "label": "YouTube" }
+          ],
+          "default": "upload"
+        },
+        {
+          "type": "video",
+          "id": "video_1",
+          "label": "Video (upload)"
+        },
+        {
+          "type": "text",
+          "id": "youtube_url_1",
+          "label": "YouTube URL or ID",
+          "placeholder": "https://www.youtube.com/watch?v=..."
+        },
+        {
+          "type": "image_picker",
+          "id": "poster_1",
+          "label": "Poster image"
+        },
+        {
+          "type": "text",
+          "id": "ratio_1",
+          "label": "Ratio badge",
+          "placeholder": "16:9"
+        },
+        {
+          "type": "text",
+          "id": "title_1",
+          "label": "Title"
+        },
+        {
+          "type": "header",
+          "content": "Clip 2"
+        },
+        {
+          "type": "select",
+          "id": "source_type_2",
+          "label": "Source",
+          "options": [
+            { "value": "upload", "label": "Upload" },
+            { "value": "youtube", "label": "YouTube" }
+          ],
+          "default": "upload"
+        },
+        {
+          "type": "video",
+          "id": "video_2",
+          "label": "Video (upload)"
+        },
+        {
+          "type": "text",
+          "id": "youtube_url_2",
+          "label": "YouTube URL or ID",
+          "placeholder": "https://www.youtube.com/watch?v=..."
+        },
+        {
+          "type": "image_picker",
+          "id": "poster_2",
+          "label": "Poster image"
+        },
+        {
+          "type": "text",
+          "id": "ratio_2",
+          "label": "Ratio badge",
+          "placeholder": "16:9"
+        },
+        {
+          "type": "text",
+          "id": "title_2",
+          "label": "Title"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "My Portfolio",
+      "blocks": []
+    }
+  ]
+}
+{% endschema %}
