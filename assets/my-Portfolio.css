@@ -4,6 +4,7 @@
   overflow: hidden;
   background: #09090b;
   padding: 64px 0;
+  min-height: 640px;
 }
 
 /* ── Intro panel (left, absolutely positioned) ── */
