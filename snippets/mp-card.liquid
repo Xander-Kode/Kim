@@ -1,0 +1,64 @@
+{%- comment -%}
+  Renders one My Portfolio card.
+  Accepts: variant ('social' | 'cinematic'), image, title, text, badge, link, attrs
+{%- endcomment -%}
+
+{%- liquid
+  if variant == 'social'
+    assign img_width = 600
+    assign img_sizes = '(min-width: 750px) 288px, 256px'
+  else
+    assign img_width = 900
+    assign img_sizes = '(min-width: 750px) 448px, 320px'
+  endif
+
+  if link != blank
+    assign tag = 'a'
+  else
+    assign tag = 'div'
+  endif
+-%}
+
+<{{ tag }}
+  class="mp-card mp-card--{{ variant }}"
+  {% if link != blank %}href="{{ link }}"{% endif %}
+  {{ attrs }}
+>
+  <div class="mp-card__media">
+    {%- if image != blank -%}
+      {{
+        image
+        | image_url: width: img_width
+        | image_tag:
+          loading: 'lazy',
+          widths: '300, 450, 600, 900',
+          sizes: img_sizes,
+          class: 'mp-card__img',
+          alt: title
+      }}
+    {%- else -%}
+      {{ 'collection-1' | placeholder_svg_tag: 'mp-card__placeholder' }}
+    {%- endif -%}
+  </div>
+  <div class="mp-card__overlay"></div>
+  <div class="mp-card__content">
+    <div class="mp-card__top">
+      {%- if badge != blank -%}
+        <span class="mp-badge">{{ badge | escape }}</span>
+      {%- endif -%}
+    </div>
+    <div class="mp-play" aria-hidden="true">
+      <div class="mp-play__btn">
+        <svg viewBox="0 0 24 24" fill="currentColor" focusable="false"><path d="M7 4.5v15a1 1 0 0 0 1.52.85l12-7.5a1 1 0 0 0 0-1.7l-12-7.5A1 1 0 0 0 7 4.5z"/></svg>
+      </div>
+    </div>
+    <div class="mp-card__bottom">
+      {%- if title != blank -%}
+        <h3 class="mp-card__title">{{ title | escape }}</h3>
+      {%- endif -%}
+      {%- if text != blank -%}
+        <p class="mp-card__text">{{ text | escape }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+</{{ tag }}>

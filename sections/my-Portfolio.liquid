@@ -1,324 +1,283 @@
 {{ 'my-Portfolio.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'my-Portfolio.js' | asset_url }}" defer="defer"></script>
 
-<div
+{%- style -%}
+  #MyPortfolio-{{ section.id }} {
+    --mp-bg: {{ section.settings.background }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+{%- endstyle -%}
+
+<my-portfolio
+  id="MyPortfolio-{{ section.id }}"
   class="mp-section"
-  id="mp-{{ section.id }}"
   data-speed="{{ section.settings.speed }}"
 >
+  {%- if section.settings.show_fades -%}
+    <div class="mp-fade mp-fade--left"></div>
+    <div class="mp-fade mp-fade--right"></div>
+  {%- endif -%}
 
-  <div class="mp-intro" id="mp-intro-{{ section.id }}">
-    {%- if section.settings.heading != blank -%}
-      <h2 class="mp-intro__heading">{{ section.settings.heading | escape }}</h2>
-    {%- endif -%}
-    {%- if section.settings.description != blank -%}
-      <p class="mp-intro__desc">{{ section.settings.description | escape }}</p>
-    {%- endif -%}
+  {%- if section.settings.heading != blank or section.settings.text != blank -%}
+    <div class="mp-intro">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="mp-intro__heading">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <p class="mp-intro__text">{{ section.settings.text | escape }}</p>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <div class="mp-track">
+    <div class="mp-inner">
+      {%- comment -%} The second copy makes the loop seamless; it is hidden from assistive tech. {%- endcomment -%}
+      {%- for copy in (1..2) -%}
+        <div class="mp-block"{% if copy == 2 %} aria-hidden="true" inert{% endif %}>
+          {%- for block in section.blocks -%}
+            {%- liquid
+              if copy == 1
+                assign attrs = block.shopify_attributes
+              else
+                assign attrs = ''
+              endif
+            -%}
+            {%- case block.type -%}
+              {%- when 'social' -%}
+                {%- render 'mp-card',
+                  variant: 'social',
+                  image: block.settings.image,
+                  title: block.settings.title,
+                  text: block.settings.text,
+                  badge: block.settings.badge,
+                  link: block.settings.link,
+                  attrs: attrs
+                -%}
+              {%- when 'pair' -%}
+                <div class="mp-pair" {{ attrs }}>
+                  {%- render 'mp-card',
+                    variant: 'cinematic',
+                    image: block.settings.image_1,
+                    title: block.settings.title_1,
+                    badge: block.settings.badge_1,
+                    link: block.settings.link_1
+                  -%}
+                  {%- render 'mp-card',
+                    variant: 'cinematic',
+                    image: block.settings.image_2,
+                    title: block.settings.title_2,
+                    badge: block.settings.badge_2,
+                    link: block.settings.link_2
+                  -%}
+                </div>
+            {%- endcase -%}
+          {%- endfor -%}
+        </div>
+      {%- endfor -%}
+    </div>
   </div>
-
-  <div class="mp-fade mp-fade--l"></div>
-  <div class="mp-fade mp-fade--r"></div>
-
-  <div class="mp-track" id="mp-track-{{ section.id }}">
-
-    {%- for _pass in (1..2) -%}
-      <div class="mp-strip"{% if forloop.index == 2 %} aria-hidden="true"{% endif %}>
-
-        {%- for block in section.blocks -%}
-
-          {%- if block.type == 'social' -%}
-
-            <div class="mp-card mp-social" {{ block.shopify_attributes }}>
-              <div
-                class="mp-bg"
-                {%- if block.settings.poster != blank -%}
-                  style="background-image: url('{{ block.settings.poster | image_url: width: 800 }}');"
-                {%- endif -%}
-              >
-                {%- if block.settings.source_type == 'youtube' and block.settings.youtube_url != blank -%}
-                  <div class="mp-yt" data-yt-input="{{ block.settings.youtube_url | escape }}"></div>
-                {%- elsif block.settings.video != blank -%}
-                  {{- block.settings.video | video_tag: loop: true, muted: true, controls: false, playsinline: true, class: 'mp-video' -}}
-                {%- endif -%}
-              </div>
-              <div class="mp-gradient"></div>
-              <div class="mp-overlay">
-                <div class="mp-overlay__top">
-                  {%- if block.settings.ratio != blank -%}
-                    <span class="mp-badge">{{ block.settings.ratio | escape }}</span>
-                  {%- endif -%}
-                </div>
-                <div class="mp-play">
-                  <div class="mp-play__btn">
-                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 5.14v14l11-7-11-7z"/></svg>
-                  </div>
-                </div>
-                <div class="mp-overlay__bottom">
-                  {%- if block.settings.title != blank -%}
-                    <p class="mp-title">{{ block.settings.title | escape }}</p>
-                  {%- endif -%}
-                  {%- if block.settings.subtitle != blank -%}
-                    <p class="mp-subtitle">{{ block.settings.subtitle | escape }}</p>
-                  {%- endif -%}
-                </div>
-              </div>
-            </div>
-
-          {%- elsif block.type == 'cinematic_pair' -%}
-
-            <div class="mp-pair" {{ block.shopify_attributes }}>
-
-              <div class="mp-clip">
-                <div
-                  class="mp-bg"
-                  {%- if block.settings.poster_1 != blank -%}
-                    style="background-image: url('{{ block.settings.poster_1 | image_url: width: 800 }}');"
-                  {%- endif -%}
-                >
-                  {%- if block.settings.source_type_1 == 'youtube' and block.settings.youtube_url_1 != blank -%}
-                    <div class="mp-yt" data-yt-input="{{ block.settings.youtube_url_1 | escape }}"></div>
-                  {%- elsif block.settings.video_1 != blank -%}
-                    {{- block.settings.video_1 | video_tag: loop: true, muted: true, controls: false, playsinline: true, class: 'mp-video' -}}
-                  {%- endif -%}
-                </div>
-                <div class="mp-gradient"></div>
-                <div class="mp-overlay">
-                  <div class="mp-overlay__top">
-                    {%- if block.settings.ratio_1 != blank -%}
-                      <span class="mp-badge">{{ block.settings.ratio_1 | escape }}</span>
-                    {%- endif -%}
-                  </div>
-                  <div class="mp-play">
-                    <div class="mp-play__btn mp-play__btn--sm">
-                      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 5.14v14l11-7-11-7z"/></svg>
-                    </div>
-                  </div>
-                  <div class="mp-overlay__bottom">
-                    {%- if block.settings.title_1 != blank -%}
-                      <p class="mp-title mp-title--sm">{{ block.settings.title_1 | escape }}</p>
-                    {%- endif -%}
-                  </div>
-                </div>
-              </div>
-
-              <div class="mp-clip">
-                <div
-                  class="mp-bg"
-                  {%- if block.settings.poster_2 != blank -%}
-                    style="background-image: url('{{ block.settings.poster_2 | image_url: width: 800 }}');"
-                  {%- endif -%}
-                >
-                  {%- if block.settings.source_type_2 == 'youtube' and block.settings.youtube_url_2 != blank -%}
-                    <div class="mp-yt" data-yt-input="{{ block.settings.youtube_url_2 | escape }}"></div>
-                  {%- elsif block.settings.video_2 != blank -%}
-                    {{- block.settings.video_2 | video_tag: loop: true, muted: true, controls: false, playsinline: true, class: 'mp-video' -}}
-                  {%- endif -%}
-                </div>
-                <div class="mp-gradient"></div>
-                <div class="mp-overlay">
-                  <div class="mp-overlay__top">
-                    {%- if block.settings.ratio_2 != blank -%}
-                      <span class="mp-badge">{{ block.settings.ratio_2 | escape }}</span>
-                    {%- endif -%}
-                  </div>
-                  <div class="mp-play">
-                    <div class="mp-play__btn mp-play__btn--sm">
-                      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 5.14v14l11-7-11-7z"/></svg>
-                    </div>
-                  </div>
-                  <div class="mp-overlay__bottom">
-                    {%- if block.settings.title_2 != blank -%}
-                      <p class="mp-title mp-title--sm">{{ block.settings.title_2 | escape }}</p>
-                    {%- endif -%}
-                  </div>
-                </div>
-              </div>
-
-            </div>
-
-          {%- endif -%}
-
-        {%- endfor -%}
-
-      </div>
-    {%- endfor -%}
-
-  </div>
-
-</div>
-
-<script src="{{ 'my-Portfolio.js' | asset_url }}" defer></script>
+</my-portfolio>
 
 {% schema %}
 {
   "name": "My Portfolio",
-  "tag": "div",
+  "tag": "section",
   "class": "section-my-portfolio",
   "settings": [
     {
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "Stories in motion."
+      "default": "Portfolio"
     },
     {
       "type": "textarea",
-      "id": "description",
+      "id": "text",
       "label": "Description",
       "default": "Discover a new perspective through films from visionary creators."
     },
     {
+      "type": "color",
+      "id": "background",
+      "label": "Background color",
+      "default": "#09090b"
+    },
+    {
       "type": "range",
       "id": "speed",
-      "label": "Scroll speed",
-      "min": 20,
-      "max": 120,
+      "label": "Auto-scroll speed",
+      "min": 0,
+      "max": 200,
       "step": 10,
       "unit": "px",
-      "default": 50
+      "default": 80,
+      "info": "Pixels per second. Set to 0 to turn off auto-scroll."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_fades",
+      "label": "Fade edges",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 8,
+      "unit": "px",
+      "default": 64
     }
   ],
   "blocks": [
     {
       "type": "social",
-      "name": "Social tile",
+      "name": "Tall card (9:16)",
       "settings": [
         {
-          "type": "select",
-          "id": "source_type",
-          "label": "Source",
-          "options": [
-            { "value": "upload", "label": "Upload" },
-            { "value": "youtube", "label": "YouTube" }
-          ],
-          "default": "upload"
-        },
-        {
-          "type": "video",
-          "id": "video",
-          "label": "Video (upload)"
-        },
-        {
-          "type": "text",
-          "id": "youtube_url",
-          "label": "YouTube URL or ID",
-          "placeholder": "https://www.youtube.com/watch?v=..."
-        },
-        {
           "type": "image_picker",
-          "id": "poster",
-          "label": "Poster image"
-        },
-        {
-          "type": "text",
-          "id": "ratio",
-          "label": "Ratio badge",
-          "placeholder": "9:16"
+          "id": "image",
+          "label": "Image"
         },
         {
           "type": "text",
           "id": "title",
-          "label": "Title"
+          "label": "Title",
+          "default": "Project title"
         },
         {
           "type": "text",
-          "id": "subtitle",
-          "label": "Subtitle"
+          "id": "text",
+          "label": "Description",
+          "default": "A short description of this project."
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "Badge",
+          "default": "9:16"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
         }
       ]
     },
     {
-      "type": "cinematic_pair",
-      "name": "Cinematic pair",
+      "type": "pair",
+      "name": "Stacked pair",
       "settings": [
         {
           "type": "header",
-          "content": "Clip 1"
-        },
-        {
-          "type": "select",
-          "id": "source_type_1",
-          "label": "Source",
-          "options": [
-            { "value": "upload", "label": "Upload" },
-            { "value": "youtube", "label": "YouTube" }
-          ],
-          "default": "upload"
-        },
-        {
-          "type": "video",
-          "id": "video_1",
-          "label": "Video (upload)"
-        },
-        {
-          "type": "text",
-          "id": "youtube_url_1",
-          "label": "YouTube URL or ID",
-          "placeholder": "https://www.youtube.com/watch?v=..."
+          "content": "Top card"
         },
         {
           "type": "image_picker",
-          "id": "poster_1",
-          "label": "Poster image"
-        },
-        {
-          "type": "text",
-          "id": "ratio_1",
-          "label": "Ratio badge",
-          "placeholder": "16:9"
+          "id": "image_1",
+          "label": "Image"
         },
         {
           "type": "text",
           "id": "title_1",
-          "label": "Title"
+          "label": "Title",
+          "default": "Project title"
+        },
+        {
+          "type": "text",
+          "id": "badge_1",
+          "label": "Badge",
+          "default": "21:9"
+        },
+        {
+          "type": "url",
+          "id": "link_1",
+          "label": "Link"
         },
         {
           "type": "header",
-          "content": "Clip 2"
-        },
-        {
-          "type": "select",
-          "id": "source_type_2",
-          "label": "Source",
-          "options": [
-            { "value": "upload", "label": "Upload" },
-            { "value": "youtube", "label": "YouTube" }
-          ],
-          "default": "upload"
-        },
-        {
-          "type": "video",
-          "id": "video_2",
-          "label": "Video (upload)"
-        },
-        {
-          "type": "text",
-          "id": "youtube_url_2",
-          "label": "YouTube URL or ID",
-          "placeholder": "https://www.youtube.com/watch?v=..."
+          "content": "Bottom card"
         },
         {
           "type": "image_picker",
-          "id": "poster_2",
-          "label": "Poster image"
-        },
-        {
-          "type": "text",
-          "id": "ratio_2",
-          "label": "Ratio badge",
-          "placeholder": "16:9"
+          "id": "image_2",
+          "label": "Image"
         },
         {
           "type": "text",
           "id": "title_2",
-          "label": "Title"
+          "label": "Title",
+          "default": "Project title"
+        },
+        {
+          "type": "text",
+          "id": "badge_2",
+          "label": "Badge",
+          "default": "16:9"
+        },
+        {
+          "type": "url",
+          "id": "link_2",
+          "label": "Link"
         }
       ]
     }
   ],
+  "max_blocks": 16,
   "presets": [
     {
       "name": "My Portfolio",
-      "blocks": []
+      "blocks": [
+        {
+          "type": "social",
+          "settings": {
+            "title": "Urban Exploration",
+            "text": "A journey through the concrete jungle at twilight."
+          }
+        },
+        {
+          "type": "pair",
+          "settings": {
+            "title_1": "Abstract Dimensions",
+            "title_2": "Nature's Echo"
+          }
+        },
+        {
+          "type": "social",
+          "settings": {
+            "title": "Neon Drift",
+            "text": "Midnight aesthetics and fast cars."
+          }
+        },
+        {
+          "type": "pair",
+          "settings": {
+            "title_1": "Portraits of Light",
+            "badge_1": "16:9",
+            "title_2": "Macro Worlds",
+            "badge_2": "21:9"
+          }
+        },
+        {
+          "type": "social",
+          "settings": {
+            "title": "Analog Textures",
+            "text": "Grain, light leaks, and nostalgia."
+          }
+        }
+      ]
     }
   ]
 }
