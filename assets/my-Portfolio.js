@@ -89,10 +89,23 @@ if (!customElements.get('my-portfolio')) {
         this.addEventListener('mouseenter', () => { isHovering = true; }, opts);
         this.addEventListener('mouseleave', () => { isHovering = false; }, opts);
 
-        window.addEventListener('wheel', (e) => {
+        /** @param {WheelEvent} e */
+        const wheelDelta = (e) => {
           const raw = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
           const unit = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? window.innerWidth : 1;
-          userVelocity += raw * unit * (isHovering ? 3 : 0.2);
+          return raw * unit;
+        };
+
+        // Over the grid, the wheel drives the track and the page stays put
+        this.addEventListener('wheel', (e) => {
+          e.preventDefault();
+          userVelocity += wheelDelta(e) * 3;
+        }, { passive: false, signal: this.abort.signal });
+
+        // Elsewhere on the page, scrolling gives the track a gentle nudge
+        window.addEventListener('wheel', (e) => {
+          if (e.target instanceof Node && this.contains(e.target)) return;
+          userVelocity += wheelDelta(e) * 0.2;
         }, opts);
 
         this.addEventListener('touchstart', (e) => {
